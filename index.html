@@ -99,17 +99,50 @@
     color: #52525b;
   }
 
-  /* iOS fallback instructions */
-  .ios-fallback {
+  /* Spinner — shown during auto-redirect attempt */
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #27272a;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 20px;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .redirecting-text {
+    font-size: 14px;
+    color: #71717a;
+    margin-bottom: 8px;
+  }
+
+  /* Fallback UI — hidden initially, shown after timeout */
+  .fallback {
     display: none;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .fallback.visible {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* iOS manual instructions (fallback) */
+  .ios-instructions {
     margin-top: 24px;
     padding-top: 24px;
     border-top: 1px solid #27272a;
   }
 
-  .ios-fallback.visible { display: block; }
-
-  .ios-fallback p {
+  .ios-instructions p {
     font-size: 14px;
     color: #a1a1aa;
     line-height: 1.5;
@@ -160,12 +193,49 @@
     font-size: 12px;
   }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+  /* Arrow pointing to bottom-right corner where the ••• menu is */
+  .arrow-hint {
+    position: fixed;
+    bottom: 50px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    animation: bounce 1.5s ease-in-out infinite;
+    z-index: 100;
+    pointer-events: none;
   }
 
-  .pulse { animation: pulse 2s ease-in-out infinite; }
+  .arrow-hint-label {
+    background: #3b82f6;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  }
+
+  .arrow-hint svg {
+    width: 24px;
+    height: 24px;
+    fill: #3b82f6;
+    filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.4));
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* Divider between auto-redirect and fallback */
+  .divider {
+    height: 1px;
+    background: #27272a;
+    margin: 24px 0;
+  }
 
   /* Error state */
   .error-card {
@@ -174,22 +244,6 @@
   }
 
   .error-card h1 { color: #fca5a5; }
-
-  /* Loading spinner */
-  .spinner {
-    display: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite;
-    margin: 0 auto;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
 
   .hidden { display: none !important; }
 </style>
@@ -205,25 +259,41 @@
     <span id="appName">In-App Browser</span> detected
   </div>
 
-  <h1>Open in your browser for the best experience</h1>
-  <p class="subtitle">
-    You're viewing this inside <strong id="appNameInline">an app</strong>'s built-in browser.
-    Tap below to continue in your default browser.
-  </p>
+  <!-- Phase 1: Auto-redirect attempt (shown immediately) -->
+  <div id="autoRedirect">
+    <h1>Redirecting&hellip;</h1>
+    <p class="subtitle">
+      Opening your link in <span id="browserName">your browser</span> for the best experience.
+    </p>
+    <div class="spinner"></div>
+    <p class="redirecting-text">Tap <strong>"Open"</strong> when prompted</p>
+  </div>
 
-  <button class="cta-button" id="ctaButton" onclick="handleRedirect()">
-    Open in Browser
-  </button>
+  <!-- Phase 2: Fallback (shown after timeout if auto-redirect didn't work) -->
+  <div class="fallback" id="fallbackUI">
+    <div class="divider"></div>
 
-  <div class="ios-fallback" id="iosFallback">
-    <p class="pulse">If the button above didn't work, follow these steps:</p>
-    <div class="step">
-      <span class="step-num">1</span>
-      <span class="step-text">Tap the <span class="menu-icon">&middot;&middot;&middot;</span> menu at the <strong>bottom right</strong> of your screen</span>
-    </div>
-    <div class="step">
-      <span class="step-num">2</span>
-      <span class="step-text">Select <strong>"Open in Safari"</strong> or <strong>"Open in Browser"</strong></span>
+    <h1>Open in your browser for the best experience</h1>
+    <p class="subtitle">
+      You're viewing this inside <strong id="appNameInline">an app</strong>'s built-in browser.
+    </p>
+
+    <!-- Button fallback (all platforms) -->
+    <button class="cta-button" id="ctaButton" onclick="handleRedirect()" style="display: none;">
+      Open in Browser
+    </button>
+
+    <!-- iOS manual instructions (last resort) -->
+    <div class="ios-instructions" id="iosInstructions" style="display: none;">
+      <p>If the button above didn't work, follow these steps:</p>
+      <div class="step">
+        <span class="step-num">1</span>
+        <span class="step-text">Tap the <span class="menu-icon">&middot;&middot;&middot;</span> menu at the <strong>bottom right</strong> of your screen</span>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <span class="step-text">Select <strong>"Open in Safari"</strong> or <strong>"Open in Browser"</strong></span>
+      </div>
     </div>
   </div>
 
@@ -247,10 +317,16 @@
   // Set to an array of allowed domains to restrict redirects, e.g.:
   // const ALLOWED_DOMAINS = ['example.com', 'shop.example.com'];
   // Set to null to allow any https:// URL.
-  const ALLOWED_DOMAINS = null;
+  var ALLOWED_DOMAINS = null;
 
   // Query parameter name that holds the destination URL
-  const URL_PARAM = 'url';
+  var URL_PARAM = 'url';
+
+  // Delay before auto-firing redirect (ms) — gives page time to render
+  var AUTO_REDIRECT_DELAY = 400;
+
+  // How long to wait before showing fallback UI (ms)
+  var FALLBACK_TIMEOUT = 2500;
 
   // ============================================================
   // DETECTION
@@ -340,39 +416,60 @@
   // REDIRECT METHODS
   // ============================================================
 
+  function stripScheme(url) {
+    return url.replace(/^https?:\/\//, '');
+  }
+
+  function getScheme(url) {
+    return url.startsWith('https') ? 'https' : 'http';
+  }
+
   function redirectNormalBrowser(url) {
     window.location.replace(url);
   }
 
+  // Android: intent:// URL auto-opens in Chrome/default browser
   function buildIntentUrl(url) {
-    // intent://host/path?query#Intent;scheme=https;end
-    var withoutScheme = url.replace(/^https?:\/\//, '');
-    var scheme = url.startsWith('https') ? 'https' : 'http';
-    return 'intent://' + withoutScheme + '#Intent;scheme=' + scheme + ';end';
+    return 'intent://' + stripScheme(url) + '#Intent;scheme=' + getScheme(url) + ';end';
   }
 
-  function redirectAndroid(url) {
-    window.location.replace(buildIntentUrl(url));
+  // iOS: x-safari-https:// triggers "open outside app" dialog → opens Safari
+  function buildSafariSchemeUrl(url) {
+    var scheme = getScheme(url);
+    // x-safari-https:// for https, x-safari-http:// for http
+    return 'x-safari-' + scheme + '://' + stripScheme(url);
   }
 
-  function redirectIOSShortcuts(url) {
-    // Generate a random shortcut name that won't exist
-    var fakeName = 'redirect-' + Math.random().toString(36).substring(2, 10) + '-' + Date.now();
-    var shortcutsUrl = 'shortcuts://x-callback-url/run-shortcut?name=' +
-      encodeURIComponent(fakeName) +
-      '&x-error=' + encodeURIComponent(url);
-
-    window.location.replace(shortcutsUrl);
-
-    // If still here after 2.5s, the trick didn't work — show fallback
-    setTimeout(function() {
-      showIOSFallback();
-    }, 2500);
+  // iOS fallback: googlechromes:// opens Chrome if installed
+  function buildChromeSchemeUrl(url) {
+    var scheme = getScheme(url);
+    // googlechromes:// for https, googlechrome:// for http
+    var chromeScheme = scheme === 'https' ? 'googlechromes' : 'googlechrome';
+    return chromeScheme + '://' + stripScheme(url);
   }
 
-  function showIOSFallback() {
-    var fallback = document.getElementById('iosFallback');
-    if (fallback) fallback.classList.add('visible');
+  // ============================================================
+  // FALLBACK UI
+  // ============================================================
+
+  function showFallbackUI(platform, appName) {
+    var fallback = document.getElementById('fallbackUI');
+    fallback.classList.add('visible');
+    document.getElementById('appNameInline').textContent = appName || 'this app';
+
+    // Show button on all platforms
+    document.getElementById('ctaButton').style.display = '';
+
+    if (platform === 'ios') {
+      // Also show manual instructions on iOS
+      document.getElementById('iosInstructions').style.display = '';
+      // Add bouncing arrow hint pointing to bottom-right menu
+      var arrow = document.createElement('div');
+      arrow.className = 'arrow-hint';
+      arrow.innerHTML = '<span class="arrow-hint-label">Tap here</span>' +
+        '<svg viewBox="0 0 24 24"><path d="M12 16l-6-6h12z"/></svg>';
+      document.body.appendChild(arrow);
+    }
   }
 
   // ============================================================
@@ -384,23 +481,25 @@
   var platform = detectPlatform(ua);
   var destination = getDestinationUrl();
 
-  // Expose for the button click handler
+  // Expose for the fallback button click handler
   window.handleRedirect = function() {
     if (!destination.url) return;
-
     if (platform === 'android') {
-      redirectAndroid(destination.url);
+      window.location.replace(buildIntentUrl(destination.url));
     } else if (platform === 'ios') {
-      redirectIOSShortcuts(destination.url);
+      // Try Safari scheme on button tap too
+      window.location.href = buildSafariSchemeUrl(destination.url);
+      // Fallback to Chrome scheme after short delay
+      setTimeout(function() {
+        window.location.href = buildChromeSchemeUrl(destination.url);
+      }, 500);
     } else {
-      // Desktop or unknown — just navigate
       window.location.replace(destination.url);
     }
   };
 
   // Page load logic
   if (!destination.url) {
-    // Show error
     document.getElementById('errorCard').style.display = '';
     document.getElementById('errorMessage').textContent = destination.error;
     return;
@@ -412,11 +511,37 @@
     return;
   }
 
-  // In-app browser detected — show the consent card
+  // ---- In-app browser detected ----
   var card = document.getElementById('card');
   card.style.display = '';
   document.getElementById('appName').textContent = detection.app || 'In-App Browser';
-  document.getElementById('appNameInline').textContent = detection.app || 'this app';
+
+  // Set browser name hint
+  var browserHint = platform === 'ios' ? 'Safari' : 'your default browser';
+  document.getElementById('browserName').textContent = browserHint;
+
+  // Auto-fire redirect after short delay (lets the page render first)
+  setTimeout(function() {
+    if (platform === 'ios') {
+      // iOS: try x-safari-https:// scheme → triggers "open outside" dialog
+      window.location.href = buildSafariSchemeUrl(destination.url);
+
+      // If Safari scheme didn't work (iOS 16), try Chrome scheme after 1s
+      setTimeout(function() {
+        window.location.href = buildChromeSchemeUrl(destination.url);
+      }, 1000);
+
+    } else if (platform === 'android') {
+      // Android: intent:// auto-fires without user gesture in most in-app browsers
+      window.location.replace(buildIntentUrl(destination.url));
+    }
+  }, AUTO_REDIRECT_DELAY);
+
+  // Show fallback UI after timeout if we're still on this page
+  setTimeout(function() {
+    // If we're still here, the auto-redirect didn't fully work
+    showFallbackUI(platform, detection.app);
+  }, FALLBACK_TIMEOUT);
 
 })();
 </script>
