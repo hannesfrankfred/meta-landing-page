@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Choose Browser</title>
+<title>Välj webbläsare</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: #0a0a0a;
+    background: #01011C;
     color: #fff;
     min-height: 100vh;
     display: flex;
@@ -22,14 +22,14 @@
   .overlay {
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(245, 197, 24, 0.06) 0%, transparent 70%);
     pointer-events: none;
   }
 
   .card {
     position: relative;
-    background: #18181b;
-    border: 1px solid #27272a;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 40px 24px 32px;
     max-width: 420px;
@@ -42,8 +42,8 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #27272a;
-    border: 1px solid #3f3f46;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 100px;
     padding: 6px 14px;
     font-size: 13px;
@@ -87,8 +87,8 @@
     align-items: center;
     gap: 10px;
     padding: 20px 12px;
-    background: #27272a;
-    border: 1px solid #3f3f46;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 14px;
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s, transform 0.1s;
@@ -99,25 +99,25 @@
 
   .browser-btn:active {
     transform: scale(0.96);
-    background: #3f3f46;
+    background: rgba(255, 255, 255, 0.1);
   }
 
   .browser-btn:hover {
-    border-color: #52525b;
-    background: #2d2d31;
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
   }
 
   .browser-btn.recommended {
-    border-color: #3b82f6;
-    background: rgba(59, 130, 246, 0.1);
+    border-color: #F5C518;
+    background: rgba(245, 197, 24, 0.1);
   }
 
   .browser-btn.recommended:hover {
-    background: rgba(59, 130, 246, 0.15);
+    background: rgba(245, 197, 24, 0.15);
   }
 
   .browser-btn.recommended:active {
-    background: rgba(59, 130, 246, 0.2);
+    background: rgba(245, 197, 24, 0.2);
   }
 
   .browser-icon {
@@ -138,7 +138,7 @@
   }
 
   .browser-btn.recommended .browser-name {
-    color: #93bbfc;
+    color: #F5C518;
   }
 
   .rec-label {
@@ -146,22 +146,19 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #3b82f6;
+    color: #F5C518;
     margin-top: -4px;
   }
 
-  /* Browser-specific icon backgrounds */
-  .icon-safari { background: linear-gradient(135deg, #006CFF, #00D4FF); }
-  .icon-chrome { background: linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4); }
-  .icon-firefox { background: linear-gradient(135deg, #FF6B2B, #FF3BDF); }
-  .icon-brave { background: linear-gradient(135deg, #FB542B, #FF7654); }
-  .icon-edge { background: linear-gradient(135deg, #0078D4, #00BCF2); }
-  .icon-default { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+  /* Browser icon images */
+  .browser-icon {
+    background: none !important;
+  }
 
-  .browser-icon svg {
-    width: 26px;
-    height: 26px;
-    fill: #fff;
+  .browser-icon img {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
   }
 
   .footer-note {
@@ -188,7 +185,7 @@
     display: none;
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid #27272a;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     text-align: left;
   }
 
@@ -215,8 +212,8 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: #27272a;
-    border: 1px solid #3f3f46;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -238,7 +235,7 @@
     display: inline-block;
     letter-spacing: 2px;
     font-weight: 900;
-    background: #3f3f46;
+    background: rgba(255, 255, 255, 0.12);
     border-radius: 4px;
     padding: 1px 5px;
     font-size: 11px;
@@ -251,13 +248,20 @@
 
   /* Error state */
   .error-card {
-    background: #1c1317;
-    border-color: #4a1525;
+    background: rgba(74, 21, 37, 0.3);
+    border-color: rgba(74, 21, 37, 0.5);
   }
 
   .error-card h1 { color: #fca5a5; }
 
   .hidden { display: none !important; }
+
+  .logo {
+    display: block;
+    width: 180px;
+    height: auto;
+    margin: 0 auto 28px;
+  }
 </style>
 </head>
 <body>
@@ -266,38 +270,39 @@
 
 <!-- Browser chooser card -->
 <div class="card" id="card" style="display: none;">
+  <img src="https://sga.cdnary.com/onerush/logo.svg" alt="OneRush" class="logo">
   <div class="app-badge">
     <span class="dot"></span>
-    <span id="appName">In-App Browser</span> detected
+    <span id="appName">In-App Browser</span> upptäckt
   </div>
 
-  <h1>Choose your browser</h1>
-  <p class="subtitle">Select which browser to open this link in:</p>
+  <h1>Välj din webbläsare</h1>
+  <p class="subtitle">Välj vilken webbläsare du vill öppna länken i:</p>
 
   <!-- iOS browsers -->
   <div class="browser-grid" id="iosBrowsers" style="display: none;">
     <a class="browser-btn recommended" onclick="openIn('safari')" role="button" tabindex="0">
-      <div class="browser-icon icon-safari">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.644 5.356l-3.89 5.398-5.398 3.89 3.89-5.398 5.398-3.89z"/></svg>
+      <div class="browser-icon">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/browser-logos/75.0.0/safari/safari_128x128.png" alt="Safari">
       </div>
       <span class="browser-name">Safari</span>
-      <span class="rec-label">Recommended</span>
+      <span class="rec-label">Rekommenderad</span>
     </a>
     <a class="browser-btn" onclick="openIn('chrome')" role="button" tabindex="0">
-      <div class="browser-icon icon-chrome">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+      <div class="browser-icon">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/browser-logos/75.0.0/chrome/chrome_128x128.png" alt="Chrome">
       </div>
       <span class="browser-name">Chrome</span>
     </a>
     <a class="browser-btn" onclick="openIn('firefox')" role="button" tabindex="0">
-      <div class="browser-icon icon-firefox">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      <div class="browser-icon">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/browser-logos/75.0.0/firefox/firefox_128x128.png" alt="Firefox">
       </div>
       <span class="browser-name">Firefox</span>
     </a>
     <a class="browser-btn" onclick="openIn('brave')" role="button" tabindex="0">
-      <div class="browser-icon icon-brave">
-        <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12.99H5V8.26l7-3.89v8.62z"/></svg>
+      <div class="browser-icon">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/browser-logos/75.0.0/brave/brave_128x128.png" alt="Brave">
       </div>
       <span class="browser-name">Brave</span>
     </a>
@@ -306,61 +311,61 @@
   <!-- Android browsers -->
   <div class="browser-grid" id="androidBrowsers" style="display: none;">
     <a class="browser-btn recommended" onclick="openIn('default')" role="button" tabindex="0">
-      <div class="browser-icon icon-default">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      <div class="browser-icon">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/browser-logos/75.0.0/chrome/chrome_128x128.png" alt="Standardwebbläsare">
       </div>
-      <span class="browser-name">Default Browser</span>
-      <span class="rec-label">Recommended</span>
+      <span class="browser-name">Standardwebbläsare</span>
+      <span class="rec-label">Rekommenderad</span>
     </a>
     <a class="browser-btn" onclick="openIn('chrome')" role="button" tabindex="0">
-      <div class="browser-icon icon-chrome">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+      <div class="browser-icon">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/browser-logos/75.0.0/chrome/chrome_128x128.png" alt="Chrome">
       </div>
       <span class="browser-name">Chrome</span>
     </a>
     <a class="browser-btn" onclick="openIn('firefox')" role="button" tabindex="0">
-      <div class="browser-icon icon-firefox">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      <div class="browser-icon">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/browser-logos/75.0.0/firefox/firefox_128x128.png" alt="Firefox">
       </div>
       <span class="browser-name">Firefox</span>
     </a>
     <a class="browser-btn" onclick="openIn('brave')" role="button" tabindex="0">
-      <div class="browser-icon icon-brave">
-        <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12.99H5V8.26l7-3.89v8.62z"/></svg>
+      <div class="browser-icon">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/browser-logos/75.0.0/brave/brave_128x128.png" alt="Brave">
       </div>
       <span class="browser-name">Brave</span>
     </a>
     <a class="browser-btn" onclick="openIn('edge')" role="button" tabindex="0">
-      <div class="browser-icon icon-edge">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+      <div class="browser-icon">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/browser-logos/75.0.0/edge/edge_128x128.png" alt="Edge">
       </div>
       <span class="browser-name">Edge</span>
     </a>
   </div>
 
-  <p class="footer-note">You'll be redirected to your destination securely.</p>
+  <p class="footer-note">Du omdirigeras säkert till din destination.</p>
 
   <button class="manual-toggle" id="manualToggle" onclick="toggleManual()">
-    None of these worked?
+    Fungerade ingen av dessa?
   </button>
 
   <div class="manual-instructions" id="manualInstructions">
-    <p>Open manually:</p>
+    <p>Öppna manuellt:</p>
     <div class="step">
       <span class="step-num">1</span>
-      <span class="step-text">Tap the <span class="menu-icon">&middot;&middot;&middot;</span> menu at the <strong>bottom right</strong> of your screen</span>
+      <span class="step-text">Tryck på <span class="menu-icon">&middot;&middot;&middot;</span> menyn längst <strong>ner till höger</strong> på skärmen</span>
     </div>
     <div class="step">
       <span class="step-num">2</span>
-      <span class="step-text">Select <strong>"Open in Safari"</strong> or <strong>"Open in Browser"</strong></span>
+      <span class="step-text">Välj <strong>"Öppna i Safari"</strong> eller <strong>"Öppna i webbläsare"</strong></span>
     </div>
   </div>
 </div>
 
 <!-- Error card -->
 <div class="card error-card" id="errorCard" style="display: none;">
-  <h1>Invalid or missing link</h1>
-  <p class="subtitle" id="errorMessage">No destination URL was provided.</p>
+  <h1>Ogiltig eller saknad länk</h1>
+  <p class="subtitle" id="errorMessage">Ingen destinations-URL angavs.</p>
 </div>
 
 <script>
@@ -408,7 +413,7 @@
   function getDestinationUrl() {
     var params = new URLSearchParams(window.location.search);
     var dest = params.get(URL_PARAM);
-    if (!dest) return { url: null, error: 'No destination URL provided. Add ?url=https://yoursite.com to this page.' };
+    if (!dest) return { url: null, error: 'Ingen destinations-URL angavs. Lägg till ?url=https://dinsite.com i länken.' };
 
     try {
       if (dest.indexOf('%') !== -1 && dest.indexOf('://') === -1) {
@@ -418,11 +423,11 @@
 
     var parsed;
     try { parsed = new URL(dest); } catch (e) {
-      return { url: null, error: 'Invalid destination URL.' };
+      return { url: null, error: 'Ogiltig destinations-URL.' };
     }
 
     if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
-      return { url: null, error: 'Only https:// and http:// URLs are allowed.' };
+      return { url: null, error: 'Endast https:// och http:// URLs är tillåtna.' };
     }
 
     if (ALLOWED_DOMAINS !== null) {
@@ -430,7 +435,7 @@
       for (var i = 0; i < ALLOWED_DOMAINS.length; i++) {
         if (parsed.hostname === ALLOWED_DOMAINS[i] || parsed.hostname.endsWith('.' + ALLOWED_DOMAINS[i])) { ok = true; break; }
       }
-      if (!ok) return { url: null, error: 'This destination domain is not allowed.' };
+      if (!ok) return { url: null, error: 'Denna domän är inte tillåten.' };
     }
 
     params.delete(URL_PARAM);
@@ -528,7 +533,7 @@
     var el = document.getElementById('manualInstructions');
     el.classList.toggle('visible');
     document.getElementById('manualToggle').textContent =
-      el.classList.contains('visible') ? 'Hide manual steps' : 'None of these worked?';
+      el.classList.contains('visible') ? 'Dölj manuella steg' : 'Fungerade ingen av dessa?';
   };
 
   // Page load
